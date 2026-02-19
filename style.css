@@ -687,4 +687,43 @@ h3 {
 
 .toast.show {
     opacity: 1;
+
+}
+
+/* 길찾기 버튼 스타일 */
+.map-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 0 20px;
+}
+
+.map-btn {
+    flex: 1;
+    display: inline-block;
+    padding: 12px 0;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.map-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* 카카오맵 버튼 색상 */
+.kakao-map-btn {
+    background-color: #FEE500;
+    color: #000000;
+}
+
+/* 네이버지도 버튼 색상 */
+.naver-map-btn {
+    background-color: #03C75A;
+    color: #FFFFFF;
 }
