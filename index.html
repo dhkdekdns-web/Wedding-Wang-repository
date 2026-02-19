@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다운 & 서정의 결혼식에 초대합니다</title>
+    <meta name="description" content="저희 두 사람의 새로운 시작을 함께 축하해 주세요.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Parisienne&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Kakao Map SDK -->
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a6195ef725cd2f29edd1d38c8d977bb0"></script>
+</head>
+
+<body>
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <!-- Intro Overlay (Background) -->
+    <div id="intro-overlay" class="intro-overlay"></div>
+
+    <!-- Intro Text (Persistent) -->
+    <div class="intro-text">
+        <span class="line1">Wedding day</span>
+        <span class="line2">Coming Soon</span>
+    </div>
+
+    <!-- Mute Button -->
+    <button id="mute-btn" class="mute-btn">🔊</button>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero fade-in-up">
+            <div class="hero-date">
+                <span>2026. 04. 19. SUN</span>
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="./images/Front_main.jpg" alt="Main Photo" class="hero-image">
+            </div>
+            <div class="hero-names">
+                <span class="groom">왕다운</span>
+                <span class="divider">|</span>
+                <span class="bride">진서정</span>
+            </div>
+            <p class="hero-location">아펠가모 선릉 4층<br>2026년 4월 19일 일요일 오후 3시 30분</p>
+        </section>
+
+        <!-- Greeting Section -->
+        <section class="greeting section-padding fade-in-up">
+            <h2 class="section-title wedding-title">Invitation</h2>
+            <div class="greeting-text">
+                <p>
+                    봄의 정원으로 오라<br>
+                    이곳에 꽃과 술과 촛불이 있으니<br>
+                    만일 당신이 오지 않는다면<br>
+                    이것들이 무슨 의미가 있는가<br>
+                    그리고, 만일 당신이 온다면<br>
+                    이것들이 또한 무슨 의미가 있는가<br>
+                    - 잘랄루딘 루미
+                </p>
+                <p>
+                    두 사람이 만나<br>
+                    하나의 계절을 시작합니다.<br>
+                    그 첫 장면에<br>
+                    당신을 초대합니다.
+                </p>
+            </div>
+            <div class="parents-area">
+                <div class="parents-row">
+                    <span>왕정현 · 박정애</span><span class="relation">의 차남</span><span>다운</span>
+                </div>
+                <div class="parents-row">
+                    <span>진원식 · 강현숙</span><span class="relation">의 장녀</span><span>서정</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendar / D-Day Section -->
+        <section class="calendar-section section-padding fade-in-up">
+            <h2 class="section-title wedding-title">Wedding day</h2>
+            <div class="calendar-wrapper">
+                <div class="calendar-header">
+                    <span class="month-only">04월</span>
+                </div>
+                <!-- Simple Calendar Markup -->
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th class="sun">일</th>
+                            <th>월</th>
+                            <th>화</th>
+                            <th>수</th>
+                            <th>목</th>
+                            <th>금</th>
+                            <th>토</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td class="sun">5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td class="sun">12</td>
+                            <td>13</td>
+                            <td>14</td>
+                            <td>15</td>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                        </tr>
+                        <tr>
+                            <td class="sun"><span class="d-day-circle">19</span></td>
+                            <td>20</td>
+                            <td>21</td>
+                            <td>22</td>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td class="sun">26</td>
+                            <td>27</td>
+                            <td>28</td>
+                            <td>29</td>
+                            <td>30</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Real-time Countdown -->
+            <div id="countdown-timer" class="countdown-timer">
+                <div class="time-box">
+                    <span id="cd-days">0</span>
+                    <span class="label">DAYS</span>
+                </div>
+                <div class="time-box">
+                    <span id="cd-hours">0</span>
+                    <span class="label">HOUR</span>
+                </div>
+                <div class="time-box">
+                    <span id="cd-minutes">0</span>
+                    <span class="label">MIN</span>
+                </div>
+                <div class="time-box">
+                    <span id="cd-seconds">0</span>
+                    <span class="label">SEC</span>
+                </div>
+            </div>
+
+            <div class="d-day-counter" id="d-day-counter">
+                결혼식까지 <span class="highlight" id="days-left">0</span>일 남았습니다.
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section section-padding fade-in-up">
+            <h2 class="section-title wedding-title">Gallery</h2>
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Images will be injected by JS -->
+            </div>
+            <div class="btn-container">
+                <button id="load-more-btn" class="load-more-btn">더보기</button>
+                <button id="collapse-btn" class="load-more-btn" style="display: none;">접기</button>
+            </div>
+
+            <!-- Gallery Modal -->
+            <div id="gallery-modal" class="gallery-modal">
+                <span class="close-modal">&times;</span>
+                <img class="modal-content" id="modal-img">
+            </div>
+        </section>
+
+        <!-- Location Section -->
+        <section class="location-section section-padding fade-in-up">
+            <h2 class="section-title wedding-title">Location</h2>
+            <div id="map" style="width:100%;height:350px;margin-bottom:20px;background-color:#eee;"></div>
+            <div class="location-details">
+                <h3>아펠가모 선릉</h3>
+                <p>서울 강남구 테헤란로 322 한신인터밸리24 4층</p>
+                <div class="transport-info">
+                    <strong>지하철</strong>
+                    <p>2호선, 수인분당선 선릉역 4번 출구 도보 5분</p>
+                </div>
+                <div class="transport-info">
+                    <strong>버스</strong>
+                    <p>
+                        간선(파랑): 146, 333, 341, 360, 740<br>
+                        광역(빨강): 1100, 1700, 2000, 7007, 8001<br>
+                        (선릉역 4번 출구, 기업은행 앞 하차)
+                    </p>
+                </div>
+                <div class="transport-info">
+                    <strong>자차</strong>
+                    <p>
+                        내비게이션: "한신인터밸리24 주차장" 검색<br>
+                        주차: 지하 2층 ~ 5층 (1시간 30분 무료)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account Section -->
+        <section class="account-section section-padding fade-in-up">
+            <h2 class="section-title">마음 전하실 곳</h2>
+            <div class="accordion">
+                <!-- Groom's Side -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        신랑측 계좌번호
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="account-row">
+                            <span class="label">신랑 왕다운</span>
+                            <span class="account-num">국민 855002-01-326301</span>
+                            <button class="copy-btn" data-clipboard-text="85500201326301">복사</button>
+                        </div>
+                        <div class="account-row">
+                            <span class="label">부 왕정현</span>
+                            <span class="account-num">새마을 9003-1966-3209-0</span>
+                            <button class="copy-btn" data-clipboard-text="9003196632090">복사</button>
+                        </div>
+                        <div class="account-row">
+                            <span class="label">모 박정애</span>
+                            <span class="account-num">하나 129-910748-36107</span>
+                            <button class="copy-btn" data-clipboard-text="12991074836107">복사</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bride's Side -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        신부측 계좌번호
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="account-row">
+                            <span class="label">신부 진서정</span>
+                            <span class="account-num">신한 110-411-016511</span>
+                            <button class="copy-btn" data-clipboard-text="110411016511">복사</button>
+                        </div>
+                        <div class="account-row">
+                            <span class="label">부 진원식</span>
+                            <span class="account-num">국민 07124-02-74264</span>
+                            <button class="copy-btn" data-clipboard-text="071240274264">복사</button>
+                        </div>
+                        <div class="account-row">
+                            <span class="label">모 강현숙</span>
+                            <span class="account-num">제일 22420189736</span>
+                            <button class="copy-btn" data-clipboard-text="22420189736">복사</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Thank you for coming</p>
+            <div class="share-buttons">
+                <button id="share-kakao-btn" class="share-icon-btn">
+                    <img src="./images/kakao_logo.jpg" alt="카카오톡 공유">
+                </button>
+                <button id="share-link-btn" class="share-icon-btn">
+                    <img src="./images/link_logo.jpg" alt="링크 복사">
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Toast Message -->
+    <div id="toast" class="toast">복사되었습니다.</div>
+
+    <!-- Background Music -->
+    <audio id="bg-music" src="./Furui_Riho_-_Hello_City_The_Animation_OP.mp3" loop></audio>
+
+    <script src="script.js" defer></script>
+</body>
+
+</html>
