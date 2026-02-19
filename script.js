@@ -255,42 +255,38 @@ document.addEventListener('DOMContentLoaded', () => {
             // 모바일에서 드래그 막기 (선택사항, 보통 초대장에서는 드래그 가능하게 둠)
         });
     }
-
-    // 8. Share Buttons
-    const shareKakaoBtn = document.getElementById('share-kakao-btn');
-    const shareLinkBtn = document.getElementById('share-link-btn');
-
-    if (shareKakaoBtn && window.kakao && window.kakao.Link) {
-        // Kakao Link Init
-        if (!kakao.isInitialized()) {
-            kakao.init('a6195ef725cd2f29edd1d38c8d977bb0');
-        }
-
-        shareKakaoBtn.addEventListener('click', () => {
-            kakao.Link.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '다운 & 서정의 결혼식에 초대합니다',
-                    description: '2026년 4월 19일 일요일 오후 3시 30분 아펠가모 선릉',
-                    imageUrl: 'https://feelcard.co.kr/mobile/jo/img/main.jpg', // Placeholder or real URL needed for image
-                    link: {
-                        mobileWebUrl: window.location.href,
-                        webUrl: window.location.href,
-                    },
-                },
-                buttons: [
-                    {
-                        title: '청첩장 보기',
-                        link: {
-                            mobileWebUrl: window.location.href,
-                            webUrl: window.location.href,
-                        },
-                    },
-                ],
-            });
-        });
+// 8. Share Buttons (수정됨)
+    // 카카오톡 초기화 (맨 처음 한 번만 실행)
+    if (!Kakao.isInitialized()) {
+        Kakao.init('a6195ef725cd2f29edd1d38c8d977bb0'); 
     }
 
+    // index.html에서 onclick="shareMessage()" 로 호출될 함수
+    window.shareMessage = function() {
+        Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: '다운 ❤️ 서정 결혼합니다',
+                description: '2026년 4월 19일 일요일 오후 3시 30분 아펠가모 선릉',
+                imageUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/images/01.jpg', // 진짜 썸네일 사진 주소로 변경됨
+                link: {
+                    mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                    webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                },
+            },
+            buttons: [
+                {
+                    title: '모바일 청첩장 보기',
+                    link: {
+                        mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                        webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                    },
+                },
+            ],
+        });
+    };
+
+    const shareLinkBtn = document.getElementById('share-link-btn');
     if (shareLinkBtn) {
         shareLinkBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(window.location.href).then(() => {
@@ -375,3 +371,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
