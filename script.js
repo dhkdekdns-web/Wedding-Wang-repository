@@ -225,68 +225,61 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
         }
     });
-
-    // 7. Kakao Map
+// 7. Kakao Map (완벽 수정본)
     const mapContainer = document.getElementById('map');
-    if (mapContainer && window.kakao && window.kakao.maps) {
-        kakao.maps.load(() => {
-            const mapOption = {
-                center: new kakao.maps.LatLng(37.5031952, 127.0463974), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
-            };
+    // kakao.maps.load 대기열을 없애고 바로 지도를 강제 실행합니다.
+    if (mapContainer && typeof kakao !== 'undefined' && kakao.maps) {
+        const mapOption = {
+            center: new kakao.maps.LatLng(37.5031952, 127.0463974), // 아펠가모 선릉 좌표
+            level: 3 // 지도의 확대 레벨
+        };
 
-            const map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        const map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
 
-            // 마커가 표시될 위치입니다 
-            const markerPosition = new kakao.maps.LatLng(37.5031952, 127.0463974);
-
-            // 마커를 생성합니다
-            const marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
-
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
-
-            // 지도 컨트롤 추가 (줌, 스카이뷰 등) - 선택사항이지만 있으면 좋음
-            const zoomControl = new kakao.maps.ZoomControl();
-            map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-            // 모바일에서 드래그 막기 (선택사항, 보통 초대장에서는 드래그 가능하게 둠)
+        const markerPosition = new kakao.maps.LatLng(37.5031952, 127.0463974);
+        const marker = new kakao.maps.Marker({
+            position: markerPosition
         });
+        marker.setMap(map); // 마커 찍기
     }
-// 8. Share Buttons (수정됨)
-    // 카카오톡 초기화 (맨 처음 한 번만 실행)
-    if (!Kakao.isInitialized()) {
+
+    // 8. Share Buttons (완벽 수정본)
+    const shareKakaoBtn = document.getElementById('share-kakao-btn');
+    const shareLinkBtn = document.getElementById('share-link-btn');
+
+    // 카카오 SDK 초기화
+    if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
         Kakao.init('a6195ef725cd2f29edd1d38c8d977bb0'); 
     }
 
-    // index.html에서 onclick="shareMessage()" 로 호출될 함수
-    window.shareMessage = function() {
-        Kakao.Share.sendDefault({
-            objectType: 'feed',
-            content: {
-                title: '다운 ❤️ 서정 결혼합니다',
-                description: '2026년 4월 19일 일요일 오후 3시 30분 아펠가모 선릉',
-                imageUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/images/01.jpg', // 진짜 썸네일 사진 주소로 변경됨
-                link: {
-                    mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
-                    webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
-                },
-            },
-            buttons: [
-                {
-                    title: '모바일 청첩장 보기',
+    // HTML의 onclick을 무시하고 자바스크립트에서 직접 버튼에 기능을 달아줍니다.
+    if (shareKakaoBtn) {
+        shareKakaoBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // 쓸데없는 화면 새로고침 방지
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '다운 ❤️ 서정 결혼합니다',
+                    description: '2026년 4월 19일 일요일 오후 3시 30분 아펠가모 선릉',
+                    imageUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/images/01.jpg',
                     link: {
                         mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
                         webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
                     },
                 },
-            ],
+                buttons: [
+                    {
+                        title: '모바일 청첩장 보기',
+                        link: {
+                            mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                            webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                        },
+                    },
+                ],
+            });
         });
-    };
+    }
 
-    const shareLinkBtn = document.getElementById('share-link-btn');
     if (shareLinkBtn) {
         shareLinkBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(window.location.href).then(() => {
@@ -297,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
+    
     // Initialize
     renderGallery();
 
@@ -371,4 +364,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 
