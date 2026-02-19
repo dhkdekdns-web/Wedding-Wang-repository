@@ -19,6 +19,10 @@
     <!-- Kakao Map SDK -->
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a6195ef725cd2f29edd1d38c8d977bb0"></script>
+
+    <!--Kakao talk SDK -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a6195ef725cd2f29edd1d38c8d977bb0"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" integrity="sha384-TiCmbV6AUnOkW9F6L5MBcf1007y0/O2aG21x/BEMwA8h1wAHEJk5Q8n1S9y8v7o" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -283,7 +287,7 @@
         <footer class="footer">
             <p>Thank you for coming</p>
             <div class="share-buttons">
-                <button id="share-kakao-btn" class="share-icon-btn">
+                <button id="share-kakao-btn" class="share-icon-btn" onclick="shareMessage()">
                     <img src="./images/kakao_logo.jpg" alt="카카오톡 공유">
                 </button>
                 <button id="share-link-btn" class="share-icon-btn">
@@ -301,5 +305,6 @@
 
     <script src="script.js" defer></script>
 </body>
+
 
 </html>
