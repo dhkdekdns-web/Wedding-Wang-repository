@@ -377,6 +377,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // 11. Easter Egg Connection (3분 대기 로직)
+    const easterBtn = document.getElementById('easter-link');
+    
+    if (easterBtn) {
+        // 3분(180,000밀리초) 뒤에 기능 활성화
+        setTimeout(() => {
+            // 3분이 지나면 클릭할 수 있다는 걸 알리기 위해 색상을 살짝 진하게 바꿉니다 (선택사항)
+            easterBtn.style.color = '#ccc'; 
+            easterBtn.style.cursor = 'pointer';
+            
+            // 클릭 시 이스터에그 0번 페이지로 이동
+            easterBtn.addEventListener('click', () => {
+                window.location.href = 'easter.html';
+            });
+            
+            console.log("Easter egg link is now active!");
+        }, 180000); // 180000ms = 3분
+    }
 });
+
 
 
