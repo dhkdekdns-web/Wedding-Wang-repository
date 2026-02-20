@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀의 방</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* 화면을 정중앙으로 맞추고 귀여운 그림자 박스를 줍니다 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fcfcfc;
+            font-family: 'Noto Serif KR', serif;
+        }
+        .easter-box {
+            text-align: center;
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 90%;
+            max-width: 400px;
+        }
+        h2 {
+            color: #5d5c5c;
+            margin-bottom: 30px;
+            font-size: 1.4rem;
+        }
+        /* 입력창 디자인 */
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: 'Noto Serif KR', serif;
+        }
+        input[type="text"]:focus {
+            border-color: #cc2679; /* 클릭 시 핑크색 테두리 */
+        }
+        /* 버튼 디자인 */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        button {
+            flex: 1;
+            padding: 15px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .submit-btn {
+            background-color: #cc2679;
+            color: white;
+        }
+        .giveup-btn {
+            background-color: #999;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="easter-box">
+        <h2>문제. "다조" 의 의미는?</h2>
+        
+        <input type="text" id="answer-input" placeholder="정답을 입력하세요" autocomplete="off">
+        
+        <div class="btn-group">
+            <button class="submit-btn" onclick="checkAnswer()">정답 제출</button>
+            <button class="giveup-btn" onclick="goPage1()">모르겠어요</button>
+        </div>
+    </div>
+
+    <script>
+        // 정답 제출 버튼을 눌렀을 때 실행되는 마법
+        function checkAnswer() {
+            // 입력창에 적힌 글자를 가져옵니다. (앞뒤 공백 무시)
+            const userAnswer = document.getElementById('answer-input').value.trim();
+            
+            // 정답 확인!
+            if (userAnswer === "솔 에르다 조각") {
+                // 띄어쓰기까지 완벽하게 맞춘 경우 2번 페이지로 이동
+                window.location.href = "easter_2.html";
+            } else if (userAnswer === "솔에르다 조각" || userAnswer === "솔에르다조각") {
+                // 혹시 띄어쓰기를 다르게 할 하객을 위한 보너스 정답 처리 (선택사항)
+                window.location.href = "easter_2.html";
+            } else {
+                // 틀린 경우
+                alert("틀렸습니다!");
+            }
+        }
+
+        // 모르겠어요 버튼을 눌렀을 때 1번 페이지로 이동
+        function goPage1() {
+            window.location.href = "easter_1.html";
+        }
+
+        // 엔터키를 쳐도 정답이 제출되게 하는 편의 기능
+        document.getElementById('answer-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    </script>
+
+</body>
+</html>
