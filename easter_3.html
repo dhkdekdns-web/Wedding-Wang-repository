@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀의 방 - 3단계 (가엔슬의 야바위)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* 스크롤 방지 */
+            font-family: 'Noto Serif KR', serif;
+            background-color: #000;
+        }
+
+        /* 배경 이미지 (처음엔 뚜렷하게, 나중엔 반투명하게) */
+        #bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('./images/front_smile.jpg') no-repeat center center/cover;
+            z-index: 1; /* 처음에 맨 앞에 있도록 */
+            transition: opacity 1.5s ease, z-index 1.5s;
+            opacity: 1;
+        }
+
+        /* 3초 뒤에 적용될 클래스 (반투명 & 뒤로 보내기) */
+        #bg-image.dimmed {
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        /* 메인 게임 컨테이너 (처음엔 투명하게 숨김) */
+        #game-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            pointer-events: none; /* 투명할 땐 클릭 안 되게 */
+        }
+
+        /* 3초 뒤 게임 화면 나타날 때 적용 */
+        #game-container.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        h2 {
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            word-break: keep-all;
+            line-height: 1.5;
+        }
+
+        .chance-text {
+            color: #ffeb3b;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+        }
+
+        /* 슬라임들을 담는 격자 */
+        #slimes-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 400px;
+            min-height: 200px;
+        }
+
+        /* 슬라임 카드 디자인 */
+        .slime-box {
+            width: 80px;
+            height: 80px;
+            background-color: #a5d6a7; /* 가엔슬 느낌의 연두색 */
+            border: 3px solid #81c784;
+            border-radius: 50% 50% 15% 15%; /* 약간 물방울(슬라임) 모양 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2e7d32;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .slime-box:hover {
+            transform: scale(1.1);
+        }
+
+        /* 섞기 애니메이션 (덜덜덜 떨림) */
+        .shuffling {
+            animation: shake 0.4s infinite;
+            pointer-events: none; /* 섞는 중엔 클릭 방지 */
+            background-color: #c8e6c9;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-2deg); }
+            20% { transform: translate(-3px, 0px) rotate(2deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(2deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-2deg); }
+            80% { transform: translate(-1px, -1px) rotate(2deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* 결과 화면 아이콘 크기 */
+        .result-icon {
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-image"></div>
+
+    <div id="game-container">
+        <h2>슬라임이 쌍드 하프이어링을 숨겼어요!<br>이걸 찾으면 쌍드 하프이어링을 얻을지도?!</h2>
+        <div class="chance-text" id="chance-display">남은 기회 5/5</div>
+        
+        <div id="slimes-area"></div>
+    </div>
+
+    <script>
+        let chances = 5;
+        let isPlaying = false; // 섞는 중이거나 결과 보여주는 중일 때 클릭 방지
+
+        // 1. 화면 로드 후 3초(3000ms) 뒤에 연출 시작
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('bg-image').classList.add('dimmed');
+                document.getElementById('game-container').classList.add('show');
+                renderStage(); // 게임 시작!
+            }, 3000);
+        });
+
+        // 2. 스테이지 그리기 (슬라임 개수: 6 -> 5 -> 4 -> 3 -> 2)
+        function renderStage() {
+            const slimesArea = document.getElementById('slimes-area');
+            const chanceDisplay = document.getElementById('chance-display');
+            
+            slimesArea.innerHTML = ''; // 기존 슬라임 초기화
+            chanceDisplay.innerText = `남은 기회 ${chances}/5`;
+
+            let slimeCount = chances + 1; // 기회가 5번일 때 슬라임 6마리
+
+            for(let i = 0; i < slimeCount; i++) {
+                const slime = document.createElement('div');
+                slime.className = 'slime-box';
+                slime.innerHTML = '👼<br>가엔슬';
+                slime.onclick = () => pickSlime(i, slimeCount);
+                slimesArea.appendChild(slime);
+            }
+
+            // 슬라임 등장 후 섞기 애니메이션 실행
+            shuffleSlimes();
+        }
+
+        // 3. 야바위 섞기 연출
+        function shuffleSlimes() {
+            isPlaying = true; // 섞는 중 클릭 금지
+            const slimes = document.querySelectorAll('.slime-box');
+            
+            slimes.forEach(slime => slime.classList.add('shuffling'));
+            
+            // 1.5초 동안 섞고 멈춤
+            setTimeout(() => {
+                slimes.forEach(slime => slime.classList.remove('shuffling'));
+                isPlaying = false; // 이제 클릭 가능!
+            }, 1500);
+        }
+
+        // 4. 슬라임 클릭 (악마의 주작 알고리즘 발동)
+        function pickSlime(pickedIndex, slimeCount) {
+            if (isPlaying) return;
+            isPlaying = true;
+
+            const slimes = document.querySelectorAll('.slime-box');
+
+            // 주작: 내가 고른 번호(pickedIndex)를 '제외한' 나머지 번호 중 하나를 정답으로 만듦
+            let answerIndex;
+            do {
+                answerIndex = Math.floor(Math.random() * slimeCount);
+            } while (answerIndex === pickedIndex);
+
+            // 내가 고른 건 무조건 꽝 처리
+            slimes[pickedIndex].innerHTML = '<div class="result-icon">💥</div>꽝!';
+            slimes[pickedIndex].style.backgroundColor = '#ffcdd2'; // 빨간색
+            slimes[pickedIndex].style.borderColor = '#ef5350';
+
+            // 진짜 쌍드 하프이어링의 위치 보여주기
+            slimes[answerIndex].innerHTML = '<div class="result-icon">💎</div>여기지롱';
+            slimes[answerIndex].style.backgroundColor = '#fff9c4'; // 노란색
+            slimes[answerIndex].style.borderColor = '#fbc02d';
+
+            // 1.5초 뒤에 다음 스테이지로 넘어가거나 게임 오버 처리
+            setTimeout(() => {
+                chances--;
+                if (chances > 0) {
+                    renderStage(); // 다음 스테이지(슬라임 1마리 감소) 진행
+                } else {
+                    // 기회 0번 (최종 게임 오버)
+                    alert("모든 기회를 잃었습니다... 영원히 하프이어링을 얻을 수 없습니다. 도박은 위험해요!");
+                    // 원하신다면 여기서 easter_1.html로 쫓아내셔도 됩니다.
+                    // window.location.href = "easter_1.html";
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
