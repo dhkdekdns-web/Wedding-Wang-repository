@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀의 방 - 2단계</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #fcfcfc;
+            font-family: 'Noto Serif KR', serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #5d5c5c;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            text-align: center;
+            word-break: keep-all;
+        }
+
+        /* 사진과 투명 버튼을 감싸는 박스 */
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* 사진 최대 크기 제한 */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 배경 사진 */
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 투명 버튼 공통 스타일 */
+        .hidden-btn {
+            position: absolute;
+            cursor: pointer;
+            /* 💡 위치 맞출 때 아래 주석(/* ... */)을 지우면 버튼 영역이 빨갛게 보여서 맞추기 쉽습니다! */
+            /* background-color: rgba(255, 0, 0, 0.4); border: 2px solid red; */ 
+        }
+
+        /* 특정위치 1 (120억 메소 함정) */
+        .trap-area {
+            top: 20%;     /* 위에서부터 몇 % 내려올지 */
+            left: 10%;    /* 왼쪽에서부터 몇 % 떨어질지 */
+            width: 30%;   /* 버튼의 가로 크기 */
+            height: 30%;  /* 버튼의 세로 크기 */
+        }
+
+        /* 특정위치 2 (정답, 3페이지로 이동) */
+        .success-area {
+            top: 50%;
+            left: 60%;
+            width: 30%;
+            height: 30%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>보스를 돌기 전 드랍을 챙겨가야해요!</h2>
+
+    <div class="image-container">
+        <img src="./images/dui.jpg" alt="드랍 아이템 챙기기">
+        
+        <div class="hidden-btn trap-area" onclick="hitTrap()"></div>
+        
+        <div class="hidden-btn success-area" onclick="goPage3()"></div>
+    </div>
+
+    <script>
+        // 1번 위치 클릭 시: 함정 발동
+        function hitTrap() {
+            alert("저런! 당신은 지금 120억 메소를 날렸어요!");
+        }
+
+        // 2번 위치 클릭 시: 다음 페이지로 이동
+        function goPage3() {
+            window.location.href = "easter_3.html";
+        }
+    </script>
+
+</body>
+</html>
