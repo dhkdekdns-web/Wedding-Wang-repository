@@ -255,22 +255,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // 모바일에서 드래그 막기 (선택사항, 보통 초대장에서는 드래그 가능하게 둠)
         });
     }
-
-    // 8. Share Buttons
-    // 카카오 SDK 초기화
-    if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
-        Kakao.init('a6195ef725cd2f29edd1d38c8d977bb0'); 
-    }
-
-    // 카카오톡 공유하기 함수 (HTML에서 onclick으로 직접 실행)
+// 8. Share Buttons
     window.shareKakao = function() {
-        // 만약 카카오 기능이 로드되지 않았다면 경고창 띄우기
-        if (typeof Kakao === 'undefined') {
-            alert("카카오 공유 기능을 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.");
+        // 1. 카카오 도구가 제대로 불러와졌는지 확인
+        if (!window.Kakao) {
+            alert("카카오톡 공유 기능을 불러오지 못했습니다. (혹시 폰트나 광고 차단 앱을 사용 중이시라면 꺼주세요!)");
             return;
         }
 
-        Kakao.Share.sendDefault({
+        // 2. 카카오 초기화 (안 되어있을 때만 실행)
+        if (!window.Kakao.isInitialized()) {
+            window.Kakao.init('a6195ef725cd2f29edd1d38c8d977bb0'); 
+        }
+
+        // 3. 공유하기 실행
+        window.Kakao.Share.sendDefault({
             objectType: 'feed',
             content: {
                 title: '다운 ❤️ 서정 결혼합니다',
@@ -293,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // 링크 복사 버튼 (기존 기능 유지)
+    // 링크 복사 버튼
     const shareLinkBtn = document.getElementById('share-link-btn');
     if (shareLinkBtn) {
         shareLinkBtn.addEventListener('click', () => {
@@ -379,4 +378,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 
