@@ -257,50 +257,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 8. Share Buttons
-    const shareKakaoBtn = document.getElementById('share-kakao-btn');
-    const shareLinkBtn = document.getElementById('share-link-btn');
+    // 카카오 SDK 초기화
+    if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+        Kakao.init('a6195ef725cd2f29edd1d38c8d977bb0'); 
+    }
 
-    if (shareKakaoBtn && window.kakao && window.kakao.Link) {
-        // Kakao Link Init
-        if (!kakao.isInitialized()) {
-            kakao.init('a6195ef725cd2f29edd1d38c8d977bb0');
-        }
+    // 카카오톡 공유하기 함수 (HTML에서 onclick으로 직접 실행)
+    window.shareKakao = function() {
+        // 만약 카카오 기능이 로드되지 않았다면 경고창 띄우기
+        if (typeof Kakao === 'undefined') {
+            alert("카카오 공유 기능을 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.");
+            return;
+        }
 
-        shareKakaoBtn.addEventListener('click', () => {
-            kakao.Link.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '다운 & 서정의 결혼식에 초대합니다',
-                    description: '2026년 4월 19일 일요일 오후 3시 30분 아펠가모 선릉',
-                    imageUrl: 'https://feelcard.co.kr/mobile/jo/img/main.jpg', // Placeholder or real URL needed for image
-                    link: {
-                        mobileWebUrl: window.location.href,
-                        webUrl: window.location.href,
-                    },
-                },
-                buttons: [
-                    {
-                        title: '청첩장 보기',
-                        link: {
-                            mobileWebUrl: window.location.href,
-                            webUrl: window.location.href,
-                        },
-                    },
-                ],
-            });
-        });
-    }
+        Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: '다운 ❤️ 서정 결혼합니다',
+                description: '2026년 4월 19일 일요일 오후 3시 30분 아펠가모 선릉',
+                imageUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/images/Front_main.jpg',
+                link: {
+                    mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                    webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                },
+            },
+            buttons: [
+                {
+                    title: '모바일 청첩장 보기',
+                    link: {
+                        mobileWebUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                        webUrl: 'https://dhkdekdns-web.github.io/Wedding-Wang-repository/',
+                    },
+                },
+            ],
+        });
+    };
 
-    if (shareLinkBtn) {
-        shareLinkBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                showToast("청첩장 링크가 복사되었습니다.");
-            }).catch(err => {
-                console.error('복사 실패:', err);
-                showToast("링크 복사에 실패했습니다.");
-            });
-        });
-    }
+    // 링크 복사 버튼 (기존 기능 유지)
+    const shareLinkBtn = document.getElementById('share-link-btn');
+    if (shareLinkBtn) {
+        shareLinkBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showToast("청첩장 링크가 복사되었습니다.");
+            }).catch(err => {
+                console.error('복사 실패:', err);
+                showToast("링크 복사에 실패했습니다.");
+            });
+        });
+    }
 
     // Initialize
     renderGallery();
@@ -375,3 +379,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
