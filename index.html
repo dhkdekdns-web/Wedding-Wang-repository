@@ -7,39 +7,31 @@
     <title>다운 & 서정의 결혼식에 초대합니다</title>
     <meta name="description" content="저희 두 사람의 새로운 시작을 함께 축하해 주세요.">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Parisienne&display=swap"
         rel="stylesheet">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Kakao Map SDK -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a6195ef725cd2f29edd1d38c8d977bb0"></script>
 
-    <!--Kakao talk SDK -->
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" integrity="sha384-TiCmbV6AUnOkW9F6L5MBcf1007y0/O2aG21x/BEMwA8h1wAHEJk5Q8n1S9y8v7o" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="confetti-container" id="confetti-container"></div>
 
-    <!-- Intro Overlay (Background) -->
     <div id="intro-overlay" class="intro-overlay"></div>
 
-    <!-- Intro Text (Persistent) -->
     <div class="intro-text">
         <span class="line1">Wedding day</span>
         <span class="line2">Coming Soon</span>
     </div>
 
-    <!-- Mute Button -->
     <button id="mute-btn" class="mute-btn">🔊</button>
 
     <main class="container">
-        <!-- Hero Section -->
         <section class="hero fade-in-up">
             <div class="hero-date">
                 <span>2026. 04. 19. SUN</span>
@@ -55,7 +47,6 @@
             <p class="hero-location">아펠가모 선릉 4층<br>2026년 4월 19일 일요일 오후 3시 30분</p>
         </section>
 
-        <!-- Greeting Section -->
         <section class="greeting section-padding fade-in-up">
             <h2 class="section-title wedding-title">Invitation</h2>
             <div class="greeting-text">
@@ -85,14 +76,12 @@
             </div>
         </section>
 
-        <!-- Calendar / D-Day Section -->
         <section class="calendar-section section-padding fade-in-up">
             <h2 class="section-title wedding-title">Wedding day</h2>
             <div class="calendar-wrapper">
                 <div class="calendar-header">
                     <span class="month-only">04월</span>
                 </div>
-                <!-- Simple Calendar Markup -->
                 <table class="calendar-table">
                     <thead>
                         <tr>
@@ -154,7 +143,6 @@
                     </tbody>
                 </table>
             </div>
-            <!-- Real-time Countdown -->
             <div id="countdown-timer" class="countdown-timer">
                 <div class="time-box">
                     <span id="cd-days">0</span>
@@ -179,31 +167,24 @@
             </div>
         </section>
 
-        <!-- Gallery Section -->
         <section class="gallery-section section-padding fade-in-up">
             <h2 class="section-title wedding-title">Gallery</h2>
             <div class="gallery-grid" id="gallery-grid">
-                <!-- Images will be injected by JS -->
-            </div>
+                </div>
             <div class="btn-container">
                 <button id="load-more-btn" class="load-more-btn">더보기</button>
                 <button id="collapse-btn" class="load-more-btn" style="display: none;">접기</button>
             </div>
 
-            <!-- Gallery Modal -->
             <div id="gallery-modal" class="gallery-modal">
                 <span class="close-modal">&times;</span>
                 <img class="modal-content" id="modal-img">
             </div>
         </section>
 
-        <!-- Location Section -->
         <section class="location-section section-padding fade-in-up">
             <h2 class="section-title wedding-title">Location</h2>
-            <div id="map" style="width:100%;height:350px;margin-bottom:20px;background-color:#eee;"></div>
-            <section class="location-section section-padding fade-in-up">
-            <h2 class="section-title wedding-title">Location</h2>
-            <div id="map" style="width:100%;height:350px;margin-bottom:10px;background-color:#eee;"></div>
+            <div id="map" style="width:100%;height:350px;margin-bottom:15px;background-color:#eee;"></div>
             
             <div class="map-buttons">
                 <a href="https://map.kakao.com/link/to/아펠가모 선릉,37.5031952,127.0463974" target="_blank" class="map-btn kakao-map-btn">
@@ -213,8 +194,7 @@
                     네이버지도 길찾기
                 </a>
             </div>
-            <div class="location-details">
-                <h3>아펠가모 선릉</h3>
+
             <div class="location-details">
                 <h3>아펠가모 선릉</h3>
                 <p>서울 강남구 테헤란로 322 한신인터밸리24 4층</p>
@@ -240,11 +220,9 @@
             </div>
         </section>
 
-        <!-- Account Section -->
         <section class="account-section section-padding fade-in-up">
             <h2 class="section-title">마음 전하실 곳</h2>
             <div class="accordion">
-                <!-- Groom's Side -->
                 <div class="accordion-item">
                     <button class="accordion-header">
                         신랑측 계좌번호
@@ -268,7 +246,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Bride's Side -->
                 <div class="accordion-item">
                     <button class="accordion-header">
                         신부측 계좌번호
@@ -295,11 +272,10 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="footer">
             <p>Thank you for coming</p>
             <div class="share-buttons">
-                <button id="share-kakao-btn" class="share-icon-btn" onclick="shareMessage()">
+                <button id="share-kakao-btn" class="share-icon-btn">
                     <img src="./images/kakao_logo.jpg" alt="카카오톡 공유">
                 </button>
                 <button id="share-link-btn" class="share-icon-btn">
@@ -309,15 +285,10 @@
         </footer>
     </main>
 
-    <!-- Toast Message -->
     <div id="toast" class="toast">복사되었습니다.</div>
 
-    <!-- Background Music -->
     <audio id="bg-music" src="./Furui_Riho_-_Hello_City_The_Animation_OP.mp3" loop></audio>
 
     <script src="script.js" defer></script>
 </body>
-
-
 </html>
-
