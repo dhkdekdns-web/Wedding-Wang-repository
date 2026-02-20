@@ -103,21 +103,18 @@
     white-space: nowrap;
     border-right: 2px solid transparent;
     padding: 0 10px;
-    /* Increased padding to prevent clipping */
-    /* Cursor effect usually, but distinct for handwriting */
-    width: 0;
-    /* initial start for anim */
+    width: 0; 
 }
 
 .intro-text .line1 {
-    animation: writeText 2s steps(40, end) forwards;
+    animation: writeText 2s steps(40, end) both;
     animation-delay: 0.5s;
 }
 
 .intro-text .line2 {
-    animation: writeText 2s steps(40, end) forwards;
-    animation-delay: 2.5s;
-    /* Start after line 1 */
+    animation: writeText 2s steps(40, end) both;
+    /* line1이 끝나는 시간(0.5s + 2s) 이후에 시작 */
+    animation-delay: 2.5s; 
 }
 
 @keyframes writeText {
@@ -727,3 +724,4 @@ h3 {
     background-color: #03C75A;
     color: #FFFFFF;
 }
+
