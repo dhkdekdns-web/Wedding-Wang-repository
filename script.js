@@ -143,88 +143,153 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 20; i++) {
         setTimeout(createConfetti, i * 100);
     }
-    // 6. Gallery Logic
-    const galleryGrid = document.getElementById('gallery-grid');
-    const loadMoreBtn = document.getElementById('load-more-btn');
-    const modal = document.getElementById('gallery-modal');
-    const modalImg = document.getElementById('modal-img');
-    const closeModal = document.querySelector('.close-modal');
+    // 6. Gallery Logic (업그레이드 버전)
+    const galleryGrid = document.getElementById('gallery-grid');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const collapseBtn = document.getElementById('collapse-btn');
+    const modal = document.getElementById('gallery-modal');
+    const modalImg = document.getElementById('modal-img');
+    const closeModalBtn = document.getElementById('close-modal-btn');
 
-    // List of images in ./images folder (hardcoded as we are client-side)
-    const galleryAppImages = [];
-    for (let i = 1; i <= 37; i++) {
-        // Pad with leading zero if needed (e.g., '01.jpg', '10.jpg')
-        const num = i.toString().padStart(2, '0');
-        galleryAppImages.push(`${num}.jpg`);
-    }
+    // 갤러리 이미지 배열 생성 (1~37번)
+    const galleryAppImages = [];
+    for (let i = 1; i <= 37; i++) {
+        const num = i.toString().padStart(2, '0');
+        galleryAppImages.push(`${num}.jpg`);
+    }
 
-    // Config
-    const ITEMS_PER_PAGE = 9;
-    let visibleCount = ITEMS_PER_PAGE;
+    const ITEMS_PER_PAGE = 9;
+    let visibleCount = ITEMS_PER_PAGE;
+    let currentImageIndex = 0; // 현재 보고 있는 사진의 번호를 기억합니다.
 
-    function renderGallery() {
-        galleryGrid.innerHTML = '';
-        galleryAppImages.forEach((src, index) => {
-            const item = document.createElement('div');
-            item.classList.add('gallery-item');
-            if (index >= visibleCount) {
-                item.classList.add('hidden');
-            }
+    function renderGallery() {
+        if (!galleryGrid) return;
+        galleryGrid.innerHTML = '';
+        
+        galleryAppImages.forEach((src, index) => {
+            const item = document.createElement('div');
+            item.classList.add('gallery-item');
+            if (index >= visibleCount) item.classList.add('hidden');
 
-            const img = document.createElement('img');
-            img.src = `./images/${src}`;
-            img.loading = "lazy";
-            img.alt = `Gallery Image ${index + 1}`;
+            const img = document.createElement('img');
+            img.src = `./images/${src}`;
+            img.loading = "lazy";
+            img.alt = `Gallery Image ${index + 1}`;
 
-            // Modal Open
-            item.addEventListener('click', () => {
-                modal.style.display = 'flex';
-                modalImg.src = img.src;
-            });
+            // 사진 클릭 시 모달창 열기
+            item.addEventListener('click', () => {
+                currentImageIndex = index; // 클릭한 사진 번호 저장
+                openModal();
+            });
 
-            item.appendChild(img);
-            galleryGrid.appendChild(item);
-        });
+            item.appendChild(img);
+            galleryGrid.appendChild(item);
+        });
+        updateButtons();
+    }
 
-        updateButtons();
-    }
+    function updateButtons() {
+        if (!loadMoreBtn || !collapseBtn) return;
+        if (visibleCount >= galleryAppImages.length) {
+            loadMoreBtn.style.display = 'none';
+            collapseBtn.style.display = 'inline-block';
+        } else {
+            loadMoreBtn.style.display = 'inline-block';
+            collapseBtn.style.display = 'none';
+        }
+    }
 
-    const collapseBtn = document.getElementById('collapse-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            document.querySelectorAll('.gallery-item.hidden').forEach(item => item.classList.remove('hidden'));
+            visibleCount = galleryAppImages.length;
+            updateButtons();
+        });
+    }
 
-    function updateButtons() {
-        if (visibleCount >= galleryAppImages.length) {
-            loadMoreBtn.style.display = 'none';
-            collapseBtn.style.display = 'inline-block';
-        } else {
-            loadMoreBtn.style.display = 'inline-block';
-            collapseBtn.style.display = 'none';
-        }
-    }
+    if (collapseBtn) {
+        collapseBtn.addEventListener('click', () => {
+            visibleCount = ITEMS_PER_PAGE;
+            renderGallery();
+            const gallerySection = document.querySelector('.gallery-section');
+            if (gallerySection) gallerySection.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
 
-    loadMoreBtn.addEventListener('click', () => {
-        const hiddenItems = document.querySelectorAll('.gallery-item.hidden');
-        hiddenItems.forEach(item => item.classList.remove('hidden'));
-        visibleCount = galleryAppImages.length;
-        updateButtons();
-    });
+    // --- 모달창 제어 및 슬라이드 기능 ---
 
-    collapseBtn.addEventListener('click', () => {
-        visibleCount = ITEMS_PER_PAGE;
-        renderGallery();
-        const gallerySection = document.querySelector('.gallery-section');
-        gallerySection.scrollIntoView({ behavior: 'smooth' });
-    });
+    function openModal() {
+        modal.style.display = 'flex';
+        modalImg.src = `./images/${galleryAppImages[currentImageIndex]}`;
+        document.body.classList.add('modal-open'); // 배경 스크롤 멈춰!
+    }
 
-    // Modal Close
-    closeModal.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    function closeModalFunc() {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open'); // 배경 스크롤 다시 움직여!
+    }
 
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
+    function showPrevImage() {
+        // 첫 사진에서 이전으로 가면 맨 마지막 사진으로
+        currentImageIndex = (currentImageIndex - 1 + galleryAppImages.length) % galleryAppImages.length;
+        modalImg.src = `./images/${galleryAppImages[currentImageIndex]}`;
+    }
+
+    function showNextImage() {
+        // 마지막 사진에서 다음으로 가면 맨 첫 사진으로
+        currentImageIndex = (currentImageIndex + 1) % galleryAppImages.length;
+        modalImg.src = `./images/${galleryAppImages[currentImageIndex]}`;
+    }
+
+    // 1. X 버튼 누르면 닫기
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModalFunc);
+    }
+
+    // 2. 검은 배경 누르면 닫기 (단, 좌우 넘기기 구역이나 사진 누르면 안 닫힘)
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModalFunc();
+        });
+    }
+
+    // 3. 좌우 벽면(투명 버튼) 터치 시 사진 넘기기
+    document.getElementById('modal-prev').addEventListener('click', (e) => {
+        e.stopPropagation(); // 클릭이 뒤로 번져서 모달이 닫히는 것 방지
+        showPrevImage();
+    });
+    document.getElementById('modal-next').addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNextImage();
+    });
+
+    // 4. 스와이프(손가락으로 밀기) 감지 기능
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    if (modal) {
+        modal.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        modal.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
+
+    function handleSwipe() {
+        const swipeThreshold = 50; // 이 픽셀 이상 밀어야 인정
+        if (touchEndX < touchStartX - swipeThreshold) {
+            showNextImage(); // 왼쪽으로 밀면 다음 사진
+        }
+        if (touchEndX > touchStartX + swipeThreshold) {
+            showPrevImage(); // 오른쪽으로 밀면 이전 사진
+        }
+    }
+
+    // 갤러리 초기 렌더링 실행
+    renderGallery();
 
     // 7. Kakao Map
     const mapContainer = document.getElementById('map');
@@ -397,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 180000); // 180000ms = 3분
     }
 });
+
 
 
 
