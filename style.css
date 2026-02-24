@@ -65,7 +65,7 @@
 
 .intro-text {
     position: absolute;
-    top: 25vh; 
+    top: 30vh; 
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -73,7 +73,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px; 
+    gap: 2px; 
 }
 
 .intro-text span {
@@ -760,5 +760,6 @@ body.modal-open {
 }
 .modal-nav.left { left: 0; }
 .modal-nav.right { right: 0; }
+
 
 
