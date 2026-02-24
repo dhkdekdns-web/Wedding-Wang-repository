@@ -73,7 +73,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px; 
+    gap: -15px; 
 }
 
 .intro-text span {
@@ -760,6 +760,7 @@ body.modal-open {
 }
 .modal-nav.left { left: 0; }
 .modal-nav.right { right: 0; }
+
 
 
 
