@@ -459,9 +459,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             console.log("Easter egg link is now active!");
-        }, 180000); // 180000ms = 3분
+        }, 30000); // 180000ms = 3분
     }
 });
+
 
 
 
