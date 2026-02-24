@@ -65,17 +65,15 @@
 
 .intro-text {
     position: absolute;
-    /* 💡 여기가 핵심 수정 포인트 1! 50%가 아니라 50vh로 수정했습니다! */
-    top: 50vh; 
+    top: 25vh; 
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    /* 💡 여기가 핵심 수정 포인트 2! 101에서 20001로 끌어올렸습니다! */
     z-index: 20001;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; 
+    gap: 7px; 
 }
 
 .intro-text span {
@@ -762,3 +760,4 @@ body.modal-open {
 }
 .modal-nav.left { left: 0; }
 .modal-nav.right { right: 0; }
+
