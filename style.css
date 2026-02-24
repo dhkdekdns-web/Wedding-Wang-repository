@@ -18,7 +18,6 @@
     top: 20px;
     left: 20px;
     z-index: 20002;
-    /* Above intro text */
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid var(--pink-strong);
     color: var(--pink-strong);
@@ -62,22 +61,21 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
-    /* Darken image for text readability */
 }
 
 .intro-text {
     position: absolute;
-    /* 👇 글자 위치를 조절하는 마법의 숫자입니다! 👇 */
-    /* 기존 30~40%에서 50%로 늘려 완벽한 정중앙으로 내렸습니다. 더 내리려면 55%, 60%로 숫자를 키우세요! */
-    top: 50%; 
+    /* 💡 여기가 핵심 수정 포인트 1! 50%가 아니라 50vh로 수정했습니다! */
+    top: 50vh; 
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    z-index: 101;
+    /* 💡 여기가 핵심 수정 포인트 2! 101에서 20001로 끌어올렸습니다! */
+    z-index: 20001;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* 두 줄 사이의 간격도 살짝 여유를 주었습니다 */
+    gap: 15px; 
 }
 
 .intro-text span {
@@ -86,28 +84,27 @@
     white-space: nowrap;
     padding: 0 10px;
     width: 0;
-    /* 타자기 커서(깜빡이는 테두리)를 없애서 펜글씨처럼 자연스럽게 만듭니다 */
     border-right: none; 
 }
 
 .intro-text .line1 {
-    /* steps(40, end)를 지우고 ease-in-out으로 변경하여 잉크가 번지듯 부드럽게 써지게 합니다 */
     animation: writeText 2s ease-in-out both;
     animation-delay: 0.5s;
     font-family: 'Parisienne', cursive;
-    font-size: 3.5rem; /* 폰트 크기도 살짝 키워 시원하게 보이게 했습니다 */
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    font-size: 3.5rem; 
+    /* 💡 다운님이 원하신 분홍색으로 변경하고 그림자를 흰색 계열로 줘서 강조했습니다 */
+    color: var(--pink-strong); 
+    text-shadow: 0 2px 5px rgba(255, 255, 255, 0.8);
 }
 
 .intro-text .line2 {
-    /* 여기도 ease-in-out으로 부드럽게! */
     animation: writeText 2s ease-in-out both;
     animation-delay: 2.5s;
     font-family: 'Parisienne', cursive;
     font-size: 2.8rem;
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    /* 💡 여기도 분홍색! */
+    color: var(--pink-strong); 
+    text-shadow: 0 2px 5px rgba(255, 255, 255, 0.8);
 }
 
 @keyframes writeText {
@@ -145,7 +142,6 @@ body {
 
 .container {
     max-width: 480px;
-    /* Mobile width constraint */
     margin: 0 auto;
     background-color: var(--white);
     min-height: 100vh;
@@ -181,7 +177,6 @@ h3 {
         opacity: 0;
         transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -193,7 +188,6 @@ h3 {
     animation: fadeInUp 1s ease-out forwards;
 }
 
-/* Delay for items */
 .fade-in-up.visible {
     opacity: 1;
     transform: translateY(0);
@@ -217,9 +211,7 @@ h3 {
 
 .hero-image-wrapper {
     width: 100%;
-    /* aspect-ratio: 3/4; */
     border-radius: 120px 120px 0 0;
-    /* Arch shape */
     overflow: hidden;
     margin-bottom: 30px;
     background-color: #eee;
@@ -273,7 +265,6 @@ h3 {
 .greeting-text p {
     margin-bottom: 20px;
     font-size: 0.9rem;
-    /* Reduced from 1.05rem (approx -3pt) */
     color: #555;
 }
 
@@ -301,8 +292,6 @@ h3 {
 .wedding-title {
     font-family: var(--font-cursive);
     font-size: 2.2rem;
-    /* Reduced from 2.5rem (approx -3pt) */
-    /* Larger for emphasis */
     color: var(--pink-strong);
 }
 
@@ -407,7 +396,6 @@ h3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 4px;
-    /* Tight gap */
     padding: 0 10px;
     margin-bottom: 20px;
 }
@@ -615,7 +603,6 @@ h3 {
     color: #888;
     font-size: 0.9rem;
     padding-bottom: 80px;
-    /* Space for bottom margin if needed */
 }
 
 .share-buttons {
@@ -685,7 +672,6 @@ h3 {
 
 .toast.show {
     opacity: 1;
-
 }
 
 /* 길찾기 버튼 스타일 */
@@ -714,13 +700,11 @@ h3 {
     transform: translateY(-2px);
 }
 
-/* 카카오맵 버튼 색상 */
 .kakao-map-btn {
     background-color: #FEE500;
     color: #000000;
 }
 
-/* 네이버지도 버튼 색상 */
 .naver-map-btn {
     background-color: #03C75A;
     color: #FFFFFF;
@@ -728,38 +712,35 @@ h3 {
 
 /* 이스터에그 연결 링크 스타일 */
 .developer-sign {
-    font-size: 10px;      /* 아주 작은 크기 */
-    color: #eee;          /* 배경과 거의 비슷한 아주 연한 회색 */
+    font-size: 10px;      
+    color: #eee;          
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    cursor: default;      /* 처음에는 클릭 안 되는 것처럼 보이게 */
-    user-select: none;    /* 글씨 드래그 방지 */
+    cursor: default;      
+    user-select: none;    
     transition: color 0.3s;
 }
 
 /* --- 갤러리 모달창 완벽 고정 및 스와이프 스타일 --- */
 
-/* 모달창이 열렸을 때 뒷배경(본문) 스크롤 완벽 차단 */
 body.modal-open {
     overflow: hidden !important;
 }
 
-/* 스크롤바에 영향받지 않는 완벽한 전체 화면 */
 .gallery-modal {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important; /* 화면 꽉 차게 */
-    height: 100vh !important; /* 화면 꽉 차게 */
+    width: 100vw !important; 
+    height: 100vh !important; 
     background-color: rgba(0, 0, 0, 0.95) !important;
-    display: none; /* JS에서 flex로 켭니다 */
+    display: none; 
     justify-content: center;
     align-items: center;
     z-index: 99999 !important;
 }
 
-/* X 버튼 화면 우측 상단에 강력 고정 */
 .close-modal {
     position: fixed !important;
     top: 20px !important;
@@ -771,16 +752,13 @@ body.modal-open {
     z-index: 100001 !important;
 }
 
-/* 좌우 터치 구역 (투명한 벽) */
 .modal-nav {
     position: absolute;
     top: 0;
-    width: 30%; /* 화면 양쪽 30%를 터치 구역으로 할당 */
+    width: 30%; 
     height: 100%;
     z-index: 100000;
     cursor: pointer;
 }
 .modal-nav.left { left: 0; }
 .modal-nav.right { right: 0; }
-
-
