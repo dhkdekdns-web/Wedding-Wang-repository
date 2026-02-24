@@ -151,12 +151,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalImg = document.getElementById('modal-img');
     const closeModalBtn = document.getElementById('close-modal-btn');
 
-    // 갤러리 이미지 배열 생성 (1~37번)
-    const galleryAppImages = [];
-    for (let i = 1; i <= 37; i++) {
-        const num = i.toString().padStart(2, '0');
-        galleryAppImages.push(`${num}.jpg`);
-    }
+    // 갤러리 이미지 커스텀 배열 생성 (원하시는 순서대로 숫자를 자유롭게 섞어서 배치하세요!)
+    const customOrder = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        11, 38, 39, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 40, 41, 30,
+        31, 32, 33, 34, 35, 36, 37
+    ];
+
+    // 위에서 작성한 리스트를 바탕으로 '01.jpg', '04.jpg' 형태의 파일명 배열을 자동 생성합니다.
+    const galleryAppImages = customOrder.map(num => {
+        return num.toString().padStart(2, '0') + '.jpg';
+    });
 
     const ITEMS_PER_PAGE = 9;
     let visibleCount = ITEMS_PER_PAGE;
@@ -462,6 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30000); // 180000ms = 3분
     }
 });
+
 
 
 
