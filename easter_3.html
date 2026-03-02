@@ -110,26 +110,33 @@
             object-fit: contain;
         }
 
-        /* 맨 위에 덮여있는 가엔슬 이미지 */
-        .slime-img {
+        /* 맨 위에 덮여있는 가엔슬 뚜껑 (비디오와 이미지를 담는 상자) */
+        .slime-cover {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
             cursor: pointer;
             z-index: 2;
             /* 위로 뛰어오르는 애니메이션을 부드럽게 설정 */
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
-        .slime-img:hover {
+        .slime-cover:hover {
             transform: scale(1.1);
         }
 
+        /* 내부 비디오 및 이미지 꽉 차게 */
+        .alive-vid, .dead-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none; /* 실제 클릭은 .slime-cover가 받도록 */
+        }
+
         /* 클릭 시 가엔슬이 위로 점프하는 클래스 */
-        .slime-img.lifted {
+        .slime-cover.lifted {
             /* 자신의 키(90px)만큼 위로 이동 */
             transform: translateY(-100px); 
         }
@@ -198,14 +205,31 @@
                 const underneath = document.createElement('div');
                 underneath.className = 'item-underneath';
 
-                // 3. 덮고 있을 가엔슬 이미지
-                const slimeImg = document.createElement('img');
-                slimeImg.className = 'slime-img';
-                slimeImg.src = './images/가엔슬.mp4';
-                slimeImg.onclick = () => pickSlime(i, slimeCount);
+                // 3. 덮고 있을 가엔슬 뚜껑 컨테이너
+                const cover = document.createElement('div');
+                cover.className = 'slime-cover';
+                cover.onclick = () => pickSlime(i, slimeCount);
 
+                // 3-1. 살아있는 가엔슬 (MP4 비디오)
+                const aliveVid = document.createElement('video');
+                aliveVid.className = 'alive-vid';
+                aliveVid.src = './images/가엔슬.mp4';
+                aliveVid.autoplay = true;
+                aliveVid.loop = true;
+                aliveVid.muted = true;        /* 모바일 자동재생 필수 조건 1 */
+                aliveVid.playsInline = true;  /* 모바일 자동재생 필수 조건 2 (전체화면 방지) */
+
+                // 3-2. 죽은 가엔슬 (PNG 이미지 - 처음엔 숨겨둠)
+                const deadImg = document.createElement('img');
+                deadImg.className = 'dead-img';
+                deadImg.src = './images/가엔슬_dead.png';
+                deadImg.style.display = 'none';
+
+                // 상자에 담기
+                cover.appendChild(aliveVid);
+                cover.appendChild(deadImg);
                 wrapper.appendChild(underneath);
-                wrapper.appendChild(slimeImg);
+                wrapper.appendChild(cover);
                 slimesArea.appendChild(wrapper);
             }
 
@@ -215,12 +239,12 @@
         // 3. 섞기 연출
         function shuffleSlimes() {
             isPlaying = true; 
-            const slimeImgs = document.querySelectorAll('.slime-img');
+            const covers = document.querySelectorAll('.slime-cover');
             
-            slimeImgs.forEach(img => img.classList.add('shuffling'));
+            covers.forEach(cover => cover.classList.add('shuffling'));
             
             setTimeout(() => {
-                slimeImgs.forEach(img => img.classList.remove('shuffling'));
+                covers.forEach(cover => cover.classList.remove('shuffling'));
                 isPlaying = false; 
             }, 1500);
         }
@@ -241,19 +265,23 @@
             // [내가 고른 것 - 꽝]
             const pickedWrapper = wrappers[pickedIndex];
             const pickedUnder = pickedWrapper.querySelector('.item-underneath');
-            const pickedImg = pickedWrapper.querySelector('.slime-img');
+            const pickedCover = pickedWrapper.querySelector('.slime-cover');
 
             pickedUnder.innerHTML = '💥'; // 밑에는 폭탄이 나옴
-            pickedImg.src = './images/가엔슬_dead.png'; // 가엔슬 죽은 표정으로 교체
-            pickedImg.classList.add('lifted'); // 위로 점프!
+            
+            // 비디오 끄고 죽은 이미지 켜기
+            pickedCover.querySelector('.alive-vid').style.display = 'none';
+            pickedCover.querySelector('.dead-img').style.display = 'block';
+            
+            pickedCover.classList.add('lifted'); // 위로 점프!
 
             // [진짜 정답 위치 보여주기]
             const answerWrapper = wrappers[answerIndex];
             const answerUnder = answerWrapper.querySelector('.item-underneath');
-            const answerImg = answerWrapper.querySelector('.slime-img');
+            const answerCover = answerWrapper.querySelector('.slime-cover');
 
-            answerUnder.innerHTML = '<img src="./images/하프이어링.png" alt="쌍드 하프이어링">'; // 밑에 쌍드 하프이어링 노출
-            answerImg.classList.add('lifted'); // 얘도 위로 점프시켜서 보여줌!
+            answerUnder.innerHTML = '<img src="./images/쌍드하프.png" alt="쌍드 하프이어링">'; // 밑에 쌍드 하프이어링 노출
+            answerCover.classList.add('lifted'); // 얘는 살아있는 채로 위로 점프시켜서 보여줌!
 
             // 1.5초 뒤 다음 스테이지
             setTimeout(() => {
