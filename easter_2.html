@@ -27,6 +27,79 @@
             word-break: keep-all;
         }
 
+        /* 팝업(모달) 전체 배경 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* 팝업이 가장 위에 보이도록 설정 */
+        }
+
+        /* 팝업(모달) 내부 컨텐츠 박스 */
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 팝업 이미지 */
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* 팝업 버튼 컨테이너 */
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* 팝업 버튼 공통 스타일 */
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        /* 돌아가기 버튼 */
+        .btn-back {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-back:hover {
+            background-color: #ccc;
+        }
+
+        /* 미니게임 도전하기 버튼 */
+        .btn-start {
+            background-color: #ff9f43;
+            color: #fff;
+        }
+
+        .btn-start:hover {
+            background-color: #ff8c21;
+        }
+
         /* 사진과 투명 버튼을 감싸는 박스 */
         .image-container {
             position: relative;
@@ -71,6 +144,15 @@
 </head>
 <body>
 
+    <div id="introModal" class="modal-overlay">
+        <div class="modal-content">
+            <img src="./images/easter_intro.png" alt="인트로 이미지">
+            <div class="modal-buttons">
+                <button class="modal-btn btn-back" onclick="goBack()">돌아가기</button>
+                <button class="modal-btn btn-start" onclick="closeModal()">미니게임 도전하기</button>
+            </div>
+        </div>
+    </div>
     <h2>보스를 돌기 전 드랍을 챙겨가야해요!</h2>
 
     <div class="image-container">
@@ -82,6 +164,16 @@
     </div>
 
     <script>
+        // 팝업: 돌아가기 클릭 시 easter.html로 이동
+        function goBack() {
+            window.location.href = "easter.html";
+        }
+
+        // 팝업: 미니게임 도전하기 클릭 시 팝업 닫기(숨김 처리)
+        function closeModal() {
+            document.getElementById('introModal').style.display = 'none';
+        }
+
         // 1번 위치 클릭 시: 함정 발동
         function hitTrap() {
             alert("저런! 당신은 지금 120억 메소를 날렸어요!");
