@@ -31,6 +31,19 @@
             z-index: -1;
         }
 
+        /* 머리 깨고 다시 도전하기용 배경 어두워짐 레이어 */
+        #dark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 5; /* bg-image(1) 보단 높고 game-container(10) 보단 낮게 */
+            pointer-events: none;
+            transition: background-color 1.5s ease;
+        }
+
         /* 메인 게임 컨테이너 */
         #game-container {
             position: relative;
@@ -78,7 +91,6 @@
             gap: 15px;
             max-width: 400px;
             min-height: 200px;
-            /* 슬라임이 위로 뛰어오를 공간(여백)을 미리 확보해둡니다 */
             padding-top: 100px; 
         }
 
@@ -89,7 +101,21 @@
             height: 90px;
         }
 
-        /* 바닥에 숨겨진 결과 (기본적으론 슬라임에 가려 안 보임) */
+        /* 슬라임 머리 위 확률 텍스트 */
+        .prob-text {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px #000, 0 0 5px #ff0000;
+            z-index: 10;
+            pointer-events: none; /* 클릭 방해 금지 */
+        }
+
+        /* 바닥에 숨겨진 결과 */
         .item-underneath {
             position: absolute;
             top: 0;
@@ -99,18 +125,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem; /* 꽝(폭탄) 이모티콘 크기 */
+            font-size: 2.5rem; 
             z-index: 1;
         }
 
-        /* 쌍드 하프이어링 이미지 사이즈 조절 */
         .item-underneath img {
             width: 80%;
             height: 80%;
             object-fit: contain;
         }
 
-        /* 맨 위에 덮여있는 가엔슬 뚜껑 (비디오와 이미지를 담는 상자) */
+        /* 맨 위에 덮여있는 가엔슬 뚜껑 */
         .slime-cover {
             position: absolute;
             top: 0;
@@ -119,7 +144,6 @@
             height: 100%;
             cursor: pointer;
             z-index: 2;
-            /* 위로 뛰어오르는 애니메이션을 부드럽게 설정 */
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
@@ -127,17 +151,14 @@
             transform: scale(1.1);
         }
 
-        /* 내부 비디오 및 이미지 꽉 차게 */
         .alive-vid, .dead-img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            pointer-events: none; /* 실제 클릭은 .slime-cover가 받도록 */
+            pointer-events: none;
         }
 
-        /* 클릭 시 가엔슬이 위로 점프하는 클래스 */
         .slime-cover.lifted {
-            /* 자신의 키(90px)만큼 위로 이동 */
             transform: translateY(-100px); 
         }
 
@@ -160,31 +181,143 @@
             90% { transform: translate(2px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
+
+        /* 게임 오버 후 나타나는 액션 버튼 영역 */
+        #action-buttons {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+            z-index: 20;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            background-color: #ff9f43;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background 0.3s, transform 0.2s;
+            word-break: keep-all;
+        }
+
+        .action-btn:hover {
+            background-color: #ff8c21;
+            transform: translateY(-2px);
+        }
+
+        /* 팝업 모달 (운영자 문의 시) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .modal-content p {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .modal-btn {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
     <div id="bg-image"></div>
+    <div id="dark-overlay"></div> <div id="customModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <img src="./images/fire.png" alt="불타는 이미지">
+            <p>메이플 스토리에선 흔하게 일어나는 일이었지 참.</p>
+            <button class="modal-btn" onclick="closeFirePopup()">닫기</button>
+        </div>
+    </div>
 
     <div id="game-container">
         <h2>슬라임이 쌍드 하프이어링을 숨겼어요!<br>이걸 찾으면 쌍드 하프이어링을 얻을지도?!</h2>
         <div class="chance-text" id="chance-display">남은 기회 5/5</div>
         
         <div id="slimes-area"></div>
+
+        <div id="action-buttons">
+            <button id="btn1" class="action-btn" onclick="handleBtn1()"></button>
+            <button id="btn2" class="action-btn" onclick="handleBtn2()"></button>
+        </div>
     </div>
 
     <script>
         let chances = 5;
         let isPlaying = false; 
+        
+        // 상태 관리를 위한 변수들
+        let currentPhase = 1; // 1:기본, 2:응애, 3:확률표시, 4:운영자팝업이후무한루프
+        let darknessLevel = 0; // 배경 흑화 레벨 (최대 3)
 
         // 1. 화면 로드 후 3초 뒤에 연출 시작
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('bg-image').classList.add('dimmed');
                 document.getElementById('game-container').classList.add('show');
-                renderStage(); 
+                startGame(1); 
             }, 3000);
         });
+
+        // 게임 (재)시작 함수
+        function startGame(phase) {
+            currentPhase = phase;
+            chances = 5; // 다시 시작할 땐 항상 5에서 시작해서 줄어드는 연출
+            isPlaying = false;
+            document.getElementById('action-buttons').style.display = 'none';
+            document.getElementById('slimes-area').style.display = 'flex';
+            
+            // 난이도에 따른 흑화 연출
+            updateDarkness();
+            renderStage();
+        }
+
+        // 확률 계산 함수
+        function getProbabilityText(count) {
+            if (count === 1) return "100%";
+            if (count === 2) return "50%";
+            if (count === 3) return "33%";
+            if (count === 4) return "25%";
+            if (count === 5) return "20%";
+            if (count === 6) return "16%";
+            return Math.floor(100 / count) + "%";
+        }
 
         // 2. 스테이지 그리기
         function renderStage() {
@@ -192,40 +325,50 @@
             const chanceDisplay = document.getElementById('chance-display');
             
             slimesArea.innerHTML = ''; 
-            chanceDisplay.innerText = `남은 기회 ${chances}/5`;
+            // 확률 표기 페이즈(3이상)에서 1마리 남았을 때도 chance가 0이지만 보여주기 위해 Max처리
+            chanceDisplay.innerText = `남은 기회 ${Math.max(0, chances)}/5`;
 
             let slimeCount = chances + 1; 
 
             for(let i = 0; i < slimeCount; i++) {
-                // 1. 껍데기 박스 생성
                 const wrapper = document.createElement('div');
                 wrapper.className = 'slime-wrapper';
 
-                // 2. 바닥에 깔릴 아이템 영역 (처음엔 비워둠)
+                // 페이즈 3이상: 슬라임 머리 위에 확률 표시
+                if (currentPhase >= 3) {
+                    const probText = document.createElement('div');
+                    probText.className = 'prob-text';
+                    probText.innerText = getProbabilityText(slimeCount);
+                    wrapper.appendChild(probText);
+                }
+
                 const underneath = document.createElement('div');
                 underneath.className = 'item-underneath';
 
-                // 3. 덮고 있을 가엔슬 뚜껑 컨테이너
                 const cover = document.createElement('div');
                 cover.className = 'slime-cover';
+                
+                // 마우스 호버 시 0%로 변환 (페이즈 3이상)
+                if (currentPhase >= 3) {
+                    cover.onmouseenter = () => { wrapper.querySelector('.prob-text').innerText = "0%"; };
+                    cover.onmouseleave = () => { wrapper.querySelector('.prob-text').innerText = getProbabilityText(slimeCount); };
+                }
+                
                 cover.onclick = () => pickSlime(i, slimeCount);
 
-                // 3-1. 살아있는 가엔슬 (MP4 비디오)
                 const aliveVid = document.createElement('video');
                 aliveVid.className = 'alive-vid';
                 aliveVid.src = './images/가엔슬.mp4';
                 aliveVid.autoplay = true;
                 aliveVid.loop = true;
-                aliveVid.muted = true;        /* 모바일 자동재생 필수 조건 1 */
-                aliveVid.playsInline = true;  /* 모바일 자동재생 필수 조건 2 (전체화면 방지) */
+                aliveVid.muted = true;        
+                aliveVid.playsInline = true;  
 
-                // 3-2. 죽은 가엔슬 (PNG 이미지 - 처음엔 숨겨둠)
                 const deadImg = document.createElement('img');
                 deadImg.className = 'dead-img';
                 deadImg.src = './images/가엔슬_dead.png';
                 deadImg.style.display = 'none';
 
-                // 상자에 담기
                 cover.appendChild(aliveVid);
                 cover.appendChild(deadImg);
                 wrapper.appendChild(underneath);
@@ -255,45 +398,153 @@
             isPlaying = true;
 
             const wrappers = document.querySelectorAll('.slime-wrapper');
-
-            // 내가 고른 걸 제외한 무작위 번호 하나를 정답으로 만듦
-            let answerIndex;
-            do {
-                answerIndex = Math.floor(Math.random() * slimeCount);
-            } while (answerIndex === pickedIndex);
-
-            // [내가 고른 것 - 꽝]
             const pickedWrapper = wrappers[pickedIndex];
             const pickedUnder = pickedWrapper.querySelector('.item-underneath');
             const pickedCover = pickedWrapper.querySelector('.slime-cover');
 
-            pickedUnder.innerHTML = '💥'; // 밑에는 폭탄이 나옴
-            
-            // 비디오 끄고 죽은 이미지 켜기
+            pickedUnder.innerHTML = '💥'; 
             pickedCover.querySelector('.alive-vid').style.display = 'none';
             pickedCover.querySelector('.dead-img').style.display = 'block';
-            
-            pickedCover.classList.add('lifted'); // 위로 점프!
+            pickedCover.classList.add('lifted'); 
 
-            // [진짜 정답 위치 보여주기]
-            const answerWrapper = wrappers[answerIndex];
-            const answerUnder = answerWrapper.querySelector('.item-underneath');
-            const answerCover = answerWrapper.querySelector('.slime-cover');
+            // 클릭 시 무조건 0%로 고정
+            if (currentPhase >= 3) {
+                pickedCover.onmouseleave = null; // 마우스 떼어도 안 돌아오게 해제
+                pickedWrapper.querySelector('.prob-text').innerText = "0%";
+            }
 
-            answerUnder.innerHTML = '<img src="./images/하프이어링.png" alt="쌍드 하프이어링">'; // 밑에 쌍드 하프이어링 노출
-            answerCover.classList.add('lifted'); // 얘는 살아있는 채로 위로 점프시켜서 보여줌!
+            // 진짜 정답 위치 보여주기 (슬라임이 1개뿐인 최후의 상황이 아닐 때만)
+            if (slimeCount > 1) {
+                let answerIndex;
+                do {
+                    answerIndex = Math.floor(Math.random() * slimeCount);
+                } while (answerIndex === pickedIndex);
 
-            // 1.5초 뒤 다음 스테이지
+                const answerWrapper = wrappers[answerIndex];
+                const answerUnder = answerWrapper.querySelector('.item-underneath');
+                const answerCover = answerWrapper.querySelector('.slime-cover');
+
+                answerUnder.innerHTML = '<img src="./images/하프이어링.png" alt="쌍드 하프이어링">'; 
+                answerCover.classList.add('lifted'); 
+            }
+
+            // 1.5초 뒤 다음 스테이지 또는 게임오버 처리
             setTimeout(() => {
                 chances--;
-                if (chances > 0) {
+
+                // 게임 오버 조건 분기
+                // 1페이즈: 남은기회 0이 되면 게임오버 (슬라임 2마리일 때 꽝 뽑으면 종료)
+                // 2페이즈 이상: 남은기회 -1이 되어야 게임오버 (슬라임 1마리 남았을 때까지 무조건 진행)
+                let endChance = (currentPhase === 1) ? 0 : -1;
+
+                if (chances > endChance) {
                     renderStage(); 
                 } else {
-                    alert("모든 기회를 잃었습니다... 영원히 하프이어링을 얻을 수 없습니다. 도박은 위험해요!");
-                    // window.location.href = "easter_1.html"; // 패배 시 이동할 곳
+                    handleGameOver();
                 }
             }, 1500);
         }
+
+        // 5. 게임 오버 후 페이즈별 버튼/팝업 처리
+        function handleGameOver() {
+            document.getElementById('slimes-area').style.display = 'none'; // 슬라임 숨기기
+
+            if (currentPhase === 1) {
+                showButtons("다시 도전하기", "\"나는 응애에요\" 난이도를 낮춰서 다시 도전하기");
+            } 
+            else if (currentPhase === 2) {
+                alert("???????????????????");
+                showButtons(" 다?? 도?하?", "??시 도전??");
+            } 
+            else if (currentPhase === 3) {
+                alert("모든 기회를 잃었습니다... 영원히 하프이어링을 얻을 수 없습니다. 도박은 위험해요!");
+                showButtons("운영자에게 문의하기", null);
+            } 
+            else if (currentPhase >= 4) {
+                if (darknessLevel >= 3) {
+                    showButtons("쬬꺆 땰랴꼬", null);
+                } else {
+                    showButtons("머리를 깨고 다시 도전하기", "조각 달라고 하기");
+                }
+            }
+        }
+
+        // 버튼 화면에 띄우기 세팅
+        function showButtons(text1, text2) {
+            const btnContainer = document.getElementById('action-buttons');
+            const btn1 = document.getElementById('btn1');
+            const btn2 = document.getElementById('btn2');
+
+            btnContainer.style.display = 'flex';
+
+            if (text1) {
+                btn1.style.display = 'block';
+                btn1.innerText = text1;
+            } else {
+                btn1.style.display = 'none';
+            }
+
+            if (text2) {
+                btn2.style.display = 'block';
+                btn2.innerText = text2;
+            } else {
+                btn2.style.display = 'none';
+            }
+        }
+
+        // 버튼 1 클릭 동작
+        function handleBtn1() {
+            if (currentPhase === 1) {
+                startGame(1);
+            } else if (currentPhase === 2) {
+                startGame(3);
+            } else if (currentPhase === 3) {
+                showFirePopup();
+            } else if (currentPhase >= 4) {
+                if (darknessLevel >= 3) {
+                    window.open('https://open.kakao.com/o/sydY28db', '_blank');
+                } else {
+                    darknessLevel++;
+                    startGame(4);
+                }
+            }
+        }
+
+        // 버튼 2 클릭 동작
+        function handleBtn2() {
+            if (currentPhase === 1) {
+                startGame(2);
+            } else if (currentPhase === 2) {
+                startGame(3);
+            } else if (currentPhase >= 4) {
+                alert("에휴... 하프이어링을 얻지도 못하는데 조각을 달라고하게요?");
+                setTimeout(() => {
+                    window.open('https://open.kakao.com/o/sydY28db', '_blank');
+                }, 3000);
+            }
+        }
+
+        // 팝업 열고 닫기 로직
+        function showFirePopup() {
+            document.getElementById('action-buttons').style.display = 'none';
+            document.getElementById('customModal').style.display = 'flex';
+        }
+
+        function closeFirePopup() {
+            document.getElementById('customModal').style.display = 'none';
+            currentPhase = 4; // 페이즈 4 진입
+            showButtons("머리를 깨고 다시 도전하기", "조각 달라고 하기");
+        }
+
+        // 배경 흑화 업데이트 (머리 깰수록 배경이 붉어지고 최종엔 까맣게)
+        function updateDarkness() {
+            const overlay = document.getElementById('dark-overlay');
+            if (darknessLevel === 0) overlay.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+            else if (darknessLevel === 1) overlay.style.backgroundColor = 'rgba(100, 0, 0, 0.4)';
+            else if (darknessLevel === 2) overlay.style.backgroundColor = 'rgba(150, 0, 0, 0.7)';
+            else if (darknessLevel >= 3) overlay.style.backgroundColor = 'rgba(0, 0, 0, 1)';
+        }
+
     </script>
 </body>
 </html>
